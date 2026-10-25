@@ -1,0 +1,64 @@
+name: Native Rust
+on:
+  push:
+    paths: ['v3/**', '.github/workflows/native-rust.yml']
+  pull_request:
+    paths: ['v3/**', '.github/workflows/native-rust.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            target: aarch64-apple-darwin
+            binary: tezbar-google-calendar
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+            binary: tezbar-google-calendar.exe
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: v3
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify actual native architecture and immutable SDK
+        run: |
+          rustc -vV
+          rustc -vV | python -c "import sys; assert 'host: ${{ matrix.target }}' in sys.stdin.read()"
+          python -c "import pathlib; t=pathlib.Path('Cargo.toml').read_text(); l=pathlib.Path('Cargo.lock').read_text(); assert '9f91afcc071c3f301414dc62b33cfeac7d89a0cf' in t and '#9f91afcc071c3f301414dc62b33cfeac7d89a0cf' in l"
+      - run: python scripts/protocol_environment_test.py -v
+      - run: cargo fmt --check
+      - run: cargo clippy --locked -j1 --all-targets --all-features -- -D warnings
+      - run: cargo test --locked -j1 -- --test-threads=1
+      - run: cargo build --locked -j1 --features fixture-network
+      - run: python scripts/protocol_test.py --binary target/debug/${{ matrix.binary }} --fixture-network
+      - name: Reject packaging of fixture-enabled executable
+        run: |
+          if python scripts/package.py --target ${{ matrix.target }} --binary target/debug/${{ matrix.binary }} --output fixture-forbidden; then
+            echo "Fixture executable incorrectly accepted"
+            exit 1
+          fi
+      - run: cargo build --locked --release -j1
+      - run: python scripts/protocol_test.py --binary target/release/${{ matrix.binary }}
+      - name: Deterministic package and isolated smoke
+        run: |
+          python scripts/package.py --target ${{ matrix.target }} --binary target/release/${{ matrix.binary }}
+          python scripts/smoke.py --target ${{ matrix.target }} --archive dist/google-calendar-${{ matrix.target }}.zip
+          python scripts/package.py --target ${{ matrix.target }} --binary target/release/${{ matrix.binary }} --output dist-repeat
+          python -c "import pathlib; p='google-calendar-${{ matrix.target }}.zip'; assert (pathlib.Path('dist')/p).read_bytes() == (pathlib.Path('dist-repeat')/p).read_bytes()"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: google-calendar-${{ matrix.target }}
+          path: v3/dist/*

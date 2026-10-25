@@ -1,0 +1,11 @@
+Google Calendar native port contains Tezbar native adapter code from
+fe71ca87f21ac4ff31505010c228f8abda0f2a89 (Apache-2.0; see LICENSE).
+Original Google Calendar Raycast behavior/assets: thomas and contributors
+j3lte, markusjura, fabitosh, geekyed, dangkhoipro, 0xdhrv, peduarte,
+oguma0923, alerix. Raycast Extensions MIT notice retained in licenses/.
+Original installed package version 1.4.4 exact upstream commit is unknown;
+repository baseline/upstream snapshot are distinct, recorded in
+resources/source-provenance.json. Icons preserved byte-for-byte; no trademark
+grant or independent authorship claim. SDK is separately pinned in Cargo.lock.
+Only the five native commands are implemented; existing 23 TypeScript tools
+remain separate and unchanged.
