@@ -38,6 +38,7 @@ jobs:
           rustc -vV
           rustc -vV | python -c "import sys; assert 'host: ${{ matrix.target }}' in sys.stdin.read()"
           python -c "import pathlib; t=pathlib.Path('Cargo.toml').read_text(); l=pathlib.Path('Cargo.lock').read_text(); assert '9f91afcc071c3f301414dc62b33cfeac7d89a0cf' in t and '#9f91afcc071c3f301414dc62b33cfeac7d89a0cf' in l"
+      - run: python scripts/protocol_environment_test.py -v
       - run: cargo fmt --check
       - run: cargo clippy --locked -j1 --all-targets --all-features -- -D warnings
       - run: cargo test --locked -j1 -- --test-threads=1

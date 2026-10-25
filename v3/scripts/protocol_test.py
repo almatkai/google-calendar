@@ -40,8 +40,11 @@ class Host:
     def __init__(self, binary, directory, origin=None, client=False, migration=None, platform=None):
         self.root = Path(directory)
         self.root.mkdir(parents=True, exist_ok=True)
-        env = {k: v for k, v in os.environ.items() if k in ('SystemRoot', 'WINDIR', 'TEMP', 'TMP')}
-        env['PATH'] = os.path.join(env.get('SystemRoot', 'C:/Windows'), 'System32') if os.name == 'nt' else '/usr/bin:/bin'
+        # Python uppercases os.environ keys on Windows; preserve the OS root for Winsock.
+        env = {k.upper(): v for k, v in os.environ.items() if k.upper() in ('SYSTEMROOT', 'WINDIR', 'TEMP', 'TMP')}
+        if os.name == 'nt' and not env.get('SYSTEMROOT'):
+            raise RuntimeError('Windows fixture host requires a nonempty SystemRoot')
+        env['PATH'] = os.path.join(env['SYSTEMROOT'], 'System32') if os.name == 'nt' else '/usr/bin:/bin'
         if origin:
             env['TEZBAR_GOOGLE_FIXTURE_ORIGIN'] = origin
         if client:
