@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 3,
+  "id": "com.tezbar.native.google-calendar",
+  "slug": "google-calendar",
+  "name": "Google Calendar",
+  "version": "1.4.4",
+  "description": "Manage your Google calendar easily. Create events, search contacts, and check out your upcoming schedule.",
+  "author": "thomas",
+  "icon": "resources/icon.png",
+  "runtime": "rust",
+  "replaces": [
+    "raycast.google-calendar"
+  ],
+  "platforms": [
+    "macOS",
+    "Windows"
+  ],
+  "preferences": [
+    {
+      "name": "addSignature",
+      "type": "checkbox",
+      "title": "Advanced",
+      "label": "Add Signature",
+      "description": "Add a signature that the event was created using Tezbar to the description of the event",
+      "default": true,
+      "required": false
+    },
+    {
+      "name": "defaultEventDuration",
+      "title": "Default Event Duration",
+      "description": "The default duration for new events",
+      "type": "dropdown",
+      "data": [
+        {
+          "title": "15 minutes",
+          "value": "15"
+        },
+        {
+          "title": "30 minutes",
+          "value": "30"
+        },
+        {
+          "title": "45 minutes",
+          "value": "45"
+        },
+        {
+          "title": "1 hour",
+          "value": "60"
+        },
+        {
+          "title": "1.5 hours",
+          "value": "90"
+        },
+        {
+          "title": "2 hours",
+          "value": "120"
+        }
+      ],
+      "default": "30",
+      "required": false
+    },
+    {
+      "name": "sendInvitations",
+      "title": "Send Invitations",
+      "description": "Whether to send email invitations (including meeting links) to guests when creating or editing events",
+      "type": "dropdown",
+      "data": [
+        {
+          "title": "All Guests",
+          "value": "all"
+        },
+        {
+          "title": "External Guests Only",
+          "value": "externalOnly"
+        },
+        {
+          "title": "None",
+          "value": "none"
+        }
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "commands": [
+    {
+      "name": "create-event",
+      "title": "Create Event",
+      "description": "Creates an event in your Google Calendar",
+      "mode": "view",
+      "platforms": [
+        "macOS",
+        "Windows"
+      ],
+      "runtime": "rust",
+      "timeoutMs": 240000,
+      "concurrency": "serialize",
+      "refreshMs": null
+    },
+    {
+      "name": "create-quick-event",
+      "title": "Create Quick Event",
+      "description": "Creates a quick event in your Google Calendar",
+      "mode": "view",
+      "platforms": [
+        "macOS",
+        "Windows"
+      ],
+      "runtime": "rust",
+      "timeoutMs": 240000,
+      "concurrency": "serialize",
+      "refreshMs": null
+    },
+    {
+      "name": "search-contacts",
+      "title": "Search Contacts",
+      "description": "Search your Google Contacts",
+      "mode": "view",
+      "platforms": [
+        "macOS",
+        "Windows"
+      ],
+      "runtime": "rust",
+      "timeoutMs": 240000,
+      "concurrency": "serialize",
+      "refreshMs": null
+    },
+    {
+      "name": "list-events",
+      "title": "List Events",
+      "description": "View your upcoming Google Calendar events",
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "showLocation",
+          "type": "checkbox",
+          "title": "Display",
+          "label": "Show location",
+          "description": "Show the event's location as an accessory in the list",
+          "default": false,
+          "required": false
+        },
+        {
+          "name": "showBirthdays",
+          "type": "checkbox",
+          "title": "Display",
+          "label": "Show birthdays",
+          "description": "Include Google Contacts birthday events when listing the primary calendar. Off by default because birthdays often flood upcoming events.",
+          "default": false,
+          "required": false
+        },
+        {
+          "name": "openCommandJoinsMeeting",
+          "type": "checkbox",
+          "title": "Advanced",
+          "label": "Join meeting",
+          "description": "Change the default behavior when opening an event to directly join the meeting (if a meeting link is available)",
+          "default": false,
+          "required": false
+        }
+      ],
+      "platforms": [
+        "macOS",
+        "Windows"
+      ],
+      "runtime": "rust",
+      "timeoutMs": 240000,
+      "concurrency": "serialize",
+      "refreshMs": null
+    },
+    {
+      "name": "list-calendars",
+      "title": "List Calendars",
+      "description": "View your Google Calendars",
+      "mode": "view",
+      "platforms": [
+        "macOS",
+        "Windows"
+      ],
+      "runtime": "rust",
+      "timeoutMs": 240000,
+      "concurrency": "serialize",
+      "refreshMs": null
+    }
+  ],
+  "verification": [
+    {
+      "platform": "macOS",
+      "state": "not-run"
+    },
+    {
+      "platform": "Windows",
+      "state": "not-run"
+    }
+  ],
+  "execution": "process",
+  "protocolVersion": 1,
+  "repository": "https://github.com/almatkai/google-calendar",
+  "capabilities": [
+    "shell.open",
+    "clipboard.write"
+  ],
+  "artifacts": {},
+  "migrationPaths": {
+    "nativeGoogleOAuth": "native-google-oauth/tokens.json"
+  }
+}

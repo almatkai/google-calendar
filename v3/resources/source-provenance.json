@@ -1,0 +1,248 @@
+{
+  "slug": "google-calendar",
+  "status": "source-inputs-only",
+  "standalone": false,
+  "source_pack_complete_for_research": true,
+  "repository": "almatkai/google-calendar",
+  "repository_exists_at_inventory": true,
+  "repository_visibility": "public",
+  "repository_proposed_name": "google-calendar",
+  "publish_allowed": "not-approved; research inputs need integration/license review",
+  "app_base": "fe71ca87f21ac4ff31505010c228f8abda0f2a89",
+  "app_branch": "fix/beta15-external-rust-extensions",
+  "source_sha256": "918668345d84d39712fbb47d64d6c1680a535eb35820c2b709766da4638c71e4",
+  "source_module": "src-tauri/src/native_core/extensions/v2_google_calendar.rs",
+  "manifest": "manifest.v2.json",
+  "manifest_icon_original_copied": true,
+  "manifest_asset_references": [
+    "icon.png"
+  ],
+  "actual_missing_assets": [],
+  "commands": 5,
+  "runtime_validation": "not-run",
+  "remaining_port_couplings": "User-owned Google Desktop OAuth client, Calendar/People scopes, loopback callback, token persistence/refresh and host URL opening. Five native commands only, not parity with the existing repository’s 23 tools. No credentials or dirty package-lock copied.",
+  "host_request_routes": [],
+  "sdk_functions": [
+    "copy",
+    "encode_component",
+    "no_view",
+    "open",
+    "unchanged",
+    "view"
+  ],
+  "license_notices": [
+    "App LICENSE retained exactly (Apache-2.0, existing Almat notice); retain Raycast MIT and original author/contributor metadata; not one license for all third-party assets. Original icons preserved; no trademark grant or independent authorship invented."
+  ],
+  "helper_downloads": [],
+  "installed_public_metadata": {
+    "author": "thomas",
+    "contributors": [
+      "j3lte",
+      "markusjura",
+      "fabitosh",
+      "geekyed",
+      "dangkhoipro",
+      "0xdhrv",
+      "peduarte",
+      "oguma0923",
+      "alerix"
+    ],
+    "license": "MIT",
+    "version": "1.4.4"
+  },
+  "installed_upstream_exact_commit": "unknown",
+  "upstream_snapshot": {
+    "slug": "google-calendar",
+    "repository": "raycast/extensions",
+    "snapshot_commit": "97ee2594a03a94fa439c26864d85ad9a96dc9fc9",
+    "installed_exact_upstream_commit": "unknown",
+    "extension_path": "extensions/google-calendar",
+    "errors": []
+  },
+  "existing_repository_upstream": {
+    "repository": "raycast/extensions",
+    "path": "extensions/google-calendar",
+    "commit": "e70deb13d6a80e7b2be3609eb1456483c0c6e1a8"
+  },
+  "installed_bundle_hash_evidence": [
+    {
+      "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/.sc-build/create-event.js",
+      "size": 707706,
+      "sha256": "940590776006804a5d4da1294d66ce5f0a13da3a7952be004e98debc30b1fdfe",
+      "copied": false
+    },
+    {
+      "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/.sc-build/create-quick-event.js",
+      "size": 834499,
+      "sha256": "40ecf9777c9f3f8ca74d92e01a94e512f96938bbaab91d8a2d53cf1f296102e3",
+      "copied": false
+    },
+    {
+      "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/.sc-build/list-calendars.js",
+      "size": 687948,
+      "sha256": "22fcb86879d61bd1b862a29b7141df8496fb338ebdc7119d5afaf12d2dc3e194",
+      "copied": false
+    },
+    {
+      "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/.sc-build/list-events.js",
+      "size": 706988,
+      "sha256": "595f90be192ae71be0f687c66634e6b3e5f47ec71970f42571b748dac12fcb10",
+      "copied": false
+    },
+    {
+      "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/.sc-build/search-contacts.js",
+      "size": 686572,
+      "sha256": "3d977eef6d4efaf2ba7a97248cfcb91de9dc5ad240d2201589276b9f283ce6c9",
+      "copied": false
+    }
+  ],
+  "files": [
+    {
+      "package": "google-calendar",
+      "path": "src-tauri/src/native_core/extensions/v2_google_calendar.rs",
+      "size": 59849,
+      "sha256": "918668345d84d39712fbb47d64d6c1680a535eb35820c2b709766da4638c71e4",
+      "origin": {
+        "type": "app-git",
+        "commit": "fe71ca87f21ac4ff31505010c228f8abda0f2a89",
+        "path": "src-tauri/src/native_core/extensions/v2_google_calendar.rs"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "LICENSE",
+      "size": 10750,
+      "sha256": "0ed6b1b2760294d4aaaa45be38e166fcc0168e1dd5190423c096fcbe1c94afbf",
+      "origin": {
+        "type": "app-git",
+        "commit": "fe71ca87f21ac4ff31505010c228f8abda0f2a89",
+        "path": "LICENSE"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "licenses/raycast-extensions-MIT.txt",
+      "size": 1064,
+      "sha256": "7f727f8b20cdd0e65f84e70b9cac2fce337dcecee4dc88955eb012ea27f02755",
+      "origin": {
+        "type": "app-git",
+        "commit": "fe71ca87f21ac4ff31505010c228f8abda0f2a89",
+        "path": "licenses/raycast-extensions-MIT.txt"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "manifest.v2.json",
+      "size": 4964,
+      "sha256": "923cd823cadb5a2b2dc0a2009666f3eac141543b6878495474637b49904fcf12",
+      "origin": {
+        "type": "catalog-selection",
+        "path": "src-tauri/src/native_core/extensions/v2_catalog.json",
+        "commit": "fe71ca87f21ac4ff31505010c228f8abda0f2a89",
+        "catalog_sha256": "a9f82ddd782dc56b3ed43b9d4d51651ce10a51a368a7befc942f200b2601e955"
+      },
+      "note": "Selected unmodified JSON object; serialization only. Runtime/verification declarations are not validation."
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/installed-package.json",
+      "size": 9369,
+      "sha256": "b58253a6e996d0face8d141c55aa3856dd4bebc7504abac4b3049f1b17c16a17",
+      "origin": {
+        "type": "local-read-only",
+        "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/package.json"
+      },
+      "note": "Original public package metadata only; no preferences/storage/cache copied."
+    },
+    {
+      "package": "google-calendar",
+      "path": "assets/icon.png",
+      "size": 10065,
+      "sha256": "76dd47f6e306655bc51149222b0549482f29e4ad52cc5750dd2deb7d0f04da24",
+      "origin": {
+        "type": "local-read-only",
+        "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/assets/icon.png"
+      },
+      "redistribution_review": "Upstream metadata declares MIT; original branding retained, no trademark grant inferred."
+    },
+    {
+      "package": "google-calendar",
+      "path": "assets/meet.png",
+      "size": 7070,
+      "sha256": "8c9cb5579d01599d31740eb76e1657e3be87f5c359f32d579316757aa2ea8b93",
+      "origin": {
+        "type": "local-read-only",
+        "path": "/Users/almat/Library/Application Support/com.tezbar.app/extensions/google-calendar/assets/meet.png"
+      },
+      "redistribution_review": "Upstream metadata declares MIT; original branding retained, no trademark grant inferred."
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/existing-repository/LICENSE",
+      "size": 1064,
+      "sha256": "7f727f8b20cdd0e65f84e70b9cac2fce337dcecee4dc88955eb012ea27f02755",
+      "origin": {
+        "type": "existing-repository-git",
+        "repository": "almatkai/google-calendar",
+        "commit": "b73fa8e5a1c614b3267ef0bbd9172611da269ae6",
+        "path": "LICENSE"
+      },
+      "visibility": "public"
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/existing-repository/UPSTREAM.md",
+      "size": 393,
+      "sha256": "41ac6b7f640ff381221afb93caa337653453301828dc260561d0e2742c6c36d5",
+      "origin": {
+        "type": "existing-repository-git",
+        "repository": "almatkai/google-calendar",
+        "commit": "b73fa8e5a1c614b3267ef0bbd9172611da269ae6",
+        "path": "UPSTREAM.md"
+      },
+      "visibility": "public"
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/upstream-directory.json",
+      "size": 13797,
+      "sha256": "c2ae197bf4eac1789eb95d539b91cd93f93cb233be1977622a35fd5099993563",
+      "origin": {
+        "type": "github-api",
+        "repository": "raycast/extensions",
+        "commit": "97ee2594a03a94fa439c26864d85ad9a96dc9fc9",
+        "path": "extensions/google-calendar"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/current-upstream/README.md",
+      "size": 125,
+      "sha256": "3c2d4a6fd48a715567aad26a0e872452c55a93022db44ab946e6ca5ff972b595",
+      "origin": {
+        "type": "https",
+        "url": "https://raw.githubusercontent.com/raycast/extensions/97ee2594a03a94fa439c26864d85ad9a96dc9fc9/extensions/google-calendar/README.md"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/current-upstream/package.json",
+      "size": 9501,
+      "sha256": "3a9b557a499863ffd3c45b567d1ed44b8b83087a659da334ee266290ed7649d4",
+      "origin": {
+        "type": "https",
+        "url": "https://raw.githubusercontent.com/raycast/extensions/97ee2594a03a94fa439c26864d85ad9a96dc9fc9/extensions/google-calendar/package.json"
+      }
+    },
+    {
+      "package": "google-calendar",
+      "path": "provenance/current-upstream/repository-LICENSE",
+      "size": 1064,
+      "sha256": "7f727f8b20cdd0e65f84e70b9cac2fce337dcecee4dc88955eb012ea27f02755",
+      "origin": {
+        "type": "https",
+        "url": "https://raw.githubusercontent.com/raycast/extensions/97ee2594a03a94fa439c26864d85ad9a96dc9fc9/LICENSE"
+      }
+    }
+  ]
+}
