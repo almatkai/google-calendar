@@ -26,8 +26,18 @@ def check(condition, label):
     CHECKS.append(label)
 
 
+def frame_summary(frame):
+    """Diagnose fixture failures without dumping OAuth URLs, tokens or views."""
+    summary = {key: frame[key] for key in ('type', 'method') if key in frame}
+    if isinstance(frame.get('error'), dict):
+        summary['error'] = {key: frame['error'][key] for key in ('code', 'message') if key in frame['error']}
+    if isinstance(frame.get('result'), dict):
+        summary['resultKeys'] = sorted(frame['result'])
+    return json.dumps(summary, sort_keys=True)
+
+
 class Host:
-    def __init__(self, binary, directory, origin=None, client=False, migration=None):
+    def __init__(self, binary, directory, origin=None, client=False, migration=None, platform=None):
         self.root = Path(directory)
         self.root.mkdir(parents=True, exist_ok=True)
         env = {k: v for k, v in os.environ.items() if k in ('SystemRoot', 'WINDIR', 'TEMP', 'TMP')}
@@ -48,7 +58,7 @@ class Host:
         hello = self.recv()
         check(hello['type'] == 'hello' and hello['protocol'] == 1 and hello['id'] == 'com.tezbar.native.google-calendar', 'hello')
         self.initialized = self.call('initialize', {'protocol': 1, 'extensionId': hello['id'],
-            'platform': 'Windows' if os.name == 'nt' else 'macOS', 'packageDir': str(Path(binary).resolve().parent.parent),
+            'platform': platform or ('Windows' if os.name == 'nt' else 'macOS'), 'packageDir': str(Path(binary).resolve().parent.parent),
             'dataDir': str(self.root / 'data'), 'tempDir': str(self.root / 'temp'),
             'grantedCapabilities': ['shell.open', 'clipboard.write'], 'reason': 'fixture', 'migrationPaths': migration or {}})
     def recv(self):
@@ -223,15 +233,33 @@ def offline(binary, root):
     finally: h.close()
 
 
+def oauth_browser_request(h):
+    check('result' in h.initialized, 'fixture initialize: ' + frame_summary(h.initialized))
+    opened = h.open('auth', 'list-events', {'showLocation': True}, {'calendarId': 'team@example.test'})
+    check(isinstance(opened.get('result'), dict) and opened['result'].get('title') == 'Connect Google Calendar',
+          'OAuth session.open: ' + frame_summary(opened))
+    request = h.request('session.call', {'sessionId': 'auth', 'operation': 'extension:invoke-action', 'payload': {'actionId': 'google:connect'}})
+    reverse = h.recv()
+    check(reverse.get('type') == 'request' and reverse.get('method') == 'host.shell.open',
+          'typed OAuth browser request: ' + frame_summary(reverse))
+    return request, reverse
+
+
+def oauth_probe(binary, root, platform=None):
+    f = Fixture()
+    try:
+        h = Host(binary, root / 'oauth-probe', f.origin, True, platform=platform)
+        try:
+            oauth_browser_request(h)
+        finally: h.close(False)
+    finally: f.close()
+
+
 def network(binary, root):
     f = Fixture()
     h = Host(binary, root / 'network', f.origin, True)
     try:
-        check('result' in h.initialized, 'fixture initialize')
-        h.open('auth', 'list-events', {'showLocation': True}, {'calendarId': 'team@example.test'})
-        request = h.request('session.call', {'sessionId': 'auth', 'operation': 'extension:invoke-action', 'payload': {'actionId': 'google:connect'}})
-        reverse = h.recv()
-        check(reverse['method'] == 'host.shell.open', 'typed OAuth browser request')
+        request, reverse = oauth_browser_request(h)
         auth = parse_qs(urlsplit(reverse['params']['target']).query)
         check(auth['code_challenge_method'] == ['S256'] and auth['access_type'] == ['offline'], 'PKCE and offline consent')
         redirect = auth['redirect_uri'][0]
@@ -349,15 +377,18 @@ def network(binary, root):
         f.close()
 
 
-def run(binary, fixture=False):
+def run(binary, fixture=False, probe=False, platform=None):
     with tempfile.TemporaryDirectory(prefix='calendar-protocol-') as d:
         root = Path(d)
         info = json.loads(subprocess.check_output([str(Path(binary).resolve()), '--protocol-info'], timeout=5))
         build = json.loads(subprocess.check_output([str(Path(binary).resolve()), '--build-info'], timeout=5))
         check(build['fixtureNetwork'] is fixture, 'fixture feature selection')
         check(info['commands'] == COMMANDS and info['version'] == '1.4.4', 'command inventory')
-        offline(binary, root)
-        if fixture: network(binary, root)
+        if probe:
+            oauth_probe(binary, root, platform)
+        else:
+            offline(binary, root)
+            if fixture: network(binary, root)
     print(json.dumps({'passed': True, 'assertions': len(CHECKS), 'checks': CHECKS, 'localFixturesOnly': True}))
 
 
@@ -365,5 +396,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--binary', required=True)
     parser.add_argument('--fixture-network', action='store_true')
+    parser.add_argument('--oauth-probe', action='store_true', help='Only check initialize, session.open and the first OAuth frame')
+    parser.add_argument('--host-platform', choices=['macOS', 'Windows'], help='Override initialize.platform for --oauth-probe; does not emulate the OS')
     args = parser.parse_args()
-    run(args.binary, args.fixture_network)
+    if args.oauth_probe and not args.fixture_network:
+        parser.error('--oauth-probe requires --fixture-network')
+    if args.host_platform and not args.oauth_probe:
+        parser.error('--host-platform requires --oauth-probe')
+    run(args.binary, args.fixture_network, args.oauth_probe, args.host_platform)

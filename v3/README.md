@@ -50,6 +50,18 @@ calendar, clipboard or download. Packaging produces deterministic sorted ZIPs,
 complete SHA-256 file inventories and a separate artifact sidecar. Publication,
 catalog pinning and real Windows/live Google validation are separate parent gates.
 
+For a focused check of the first OAuth browser request, use the fixture build:
+
+```sh
+python3 scripts/protocol_test.py --binary target/debug/tezbar-google-calendar --fixture-network --oauth-probe
+```
+
+On Windows use the `.exe` binary. Failures include the frame type, method and
+fixture error code/message, omitting OAuth URLs, token fields and view contents.
+`--host-platform Windows` overrides only `initialize.platform` in this probe;
+running it on macOS does not verify native Windows behavior. The full fixture
+harness remains required and uses the same initial OAuth checks.
+
 People API routing/read-mask/cache warmup follow the official endpoint contracts:
 https://developers.google.com/people/api/rest/v1/people/searchContacts
 and https://developers.google.com/people/api/rest/v1/otherContacts/search.
